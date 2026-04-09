@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manual de Usuario y Configuración — Simulación de Negocio · ARPI</title>
+  <style>
+    /* ======================== RESET & BASE ======================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      color: #2d2d2d;
+      background: #f7f8fa;
+      line-height: 1.7;
+    }
+
+    /* ======================== VARIABLES DE COLOR ======================== */
+    :root {
+      --arpi-gold: #b89332;
+      --arpi-gold-light: #d4aa44;
+      --arpi-gray-dark: #3a3a3a;
+      --arpi-gray-mid: #6b6b6b;
+      --arpi-gray-light: #e8e8e8;
+      --arpi-bg: #f7f8fa;
+      --arpi-white: #ffffff;
+      --arpi-accent: #8a6e1e;
+      --code-bg: #f0ece0;
+      --code-border: #c9b06a;
+      --badge-green: #2e7d32;
+      --badge-blue: #1565c0;
+      --badge-orange: #e65100;
+      --badge-gray: #546e7a;
+    }
+
+    /* ======================== LAYOUT ======================== */
+    .wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ======================== SIDEBAR / ÍNDICE ======================== */
+    nav.sidebar {
+      width: 270px;
+      min-width: 270px;
+      background: var(--arpi-gray-dark);
+      color: #e0e0e0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 0 0 2rem 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-logo {
+      background: var(--arpi-gold);
+      padding: 1.4rem 1.2rem;
+      text-align: center;
+    }
+    .sidebar-logo h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #1a1a1a;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .sidebar-logo p {
+      font-size: 0.75rem;
+      color: #3a2e00;
+      margin-top: 0.3rem;
+      font-weight: 600;
+    }
+    .sidebar-section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--arpi-gold-light);
+      padding: 1.2rem 1.2rem 0.3rem;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      margin-top: 0.5rem;
+    }
+    .sidebar-section-title:first-of-type { border-top: none; }
+    nav.sidebar ul { list-style: none; }
+    nav.sidebar ul li a {
+      display: block;
+      padding: 0.42rem 1.4rem;
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.87rem;
+      border-left: 3px solid transparent;
+      transition: all 0.18s;
+    }
+    nav.sidebar ul li a:hover,
+    nav.sidebar ul li a.active {
+      background: rgba(184,147,50,0.13);
+      color: var(--arpi-gold-light);
+      border-left-color: var(--arpi-gold);
+    }
+    nav.sidebar ul li a .num {
+      display: inline-block;
+      width: 1.4rem;
+      font-weight: 700;
+      color: var(--arpi-gold);
+      font-size: 0.8rem;
+    }
+
+    /* ======================== CONTENIDO PRINCIPAL ======================== */
+    main.content {
+      flex: 1;
+      padding: 2.5rem 3rem 4rem 3rem;
+      max-width: 1100px;
+    }
+
+    /* ======================== HERO ======================== */
+    .hero {
+      background: linear-gradient(135deg, var(--arpi-gray-dark) 60%, var(--arpi-gold) 100%);
+      border-radius: 14px;
+      padding: 2.8rem 2.5rem;
+      color: #fff;
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "ARPI";
+      position: absolute;
+      right: -10px;
+      bottom: -30px;
+      font-size: 9rem;
+      font-weight: 900;
+      color: rgba(255,255,255,0.05);
+      letter-spacing: 4px;
+      pointer-events: none;
+    }
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--arpi-gold-light);
+      margin-bottom: 0.5rem;
+    }
+    .hero p {
+      font-size: 1rem;
+      color: #d0d0d0;
+      max-width: 680px;
+    }
+    .hero .meta {
+      margin-top: 1rem;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ======================== SECCIONES ======================== */
+    section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 1.5rem;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.7rem;
+      border-bottom: 2px solid var(--arpi-gold);
+    }
+    .section-header .icon {
+      width: 36px; height: 36px;
+      background: var(--arpi-gold);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; color: #1a1a1a; flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--arpi-gray-dark);
+    }
+    .subsection { margin-top: 1.8rem; }
+    .subsection h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--arpi-accent);
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .subsection h3::before {
+      content: '';
+      display: inline-block;
+      width: 4px; height: 16px;
+      background: var(--arpi-gold);
+      border-radius: 2px;
+    }
+    p { margin-bottom: 0.9rem; }
+
+    /* ======================== TARJETAS ======================== */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    .card {
+      background: var(--arpi-white);
+      border: 1px solid var(--arpi-gray-light);
+      border-radius: 10px;
+      padding: 1.1rem 1.2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
+    .card .card-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+    .card h4 { font-size: 0.9rem; font-weight: 700; color: var(--arpi-gray-dark); margin-bottom: 0.3rem; }
+    .card p { font-size: 0.83rem; color: var(--arpi-gray-mid); margin: 0; }
+
+    /* ======================== TABLA ======================== */
+    .table-wrap { overflow-x: auto; margin-bottom: 1.2rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      background: var(--arpi-white);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    thead { background: var(--arpi-gray-dark); color: var(--arpi-gold-light); }
+    thead th { padding: 0.75rem 1rem; text-align: left; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.5px; }
+    tbody tr:nth-child(odd)  { background: #fafafa; }
+    tbody tr:nth-child(even) { background: var(--arpi-white); }
+    tbody tr:hover { background: #fff8e1; }
+    tbody td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--arpi-gray-light); vertical-align: top; }
+    tbody td:first-child { font-weight: 600; color: var(--arpi-accent); }
+
+    /* ======================== CÓDIGO ======================== */
+    pre, code {
+      font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+      font-size: 0.84rem;
+    }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+      color: #5a3e00;
+    }
+    pre {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      overflow-x: auto;
+      margin-bottom: 1.2rem;
+      line-height: 1.6;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    pre .kw  { color: #569cd6; }
+    pre .str { color: #ce9178; }
+    pre .cmt { color: #6a9955; font-style: italic; }
+    pre .cls { color: #4ec9b0; }
+    pre .num { color: #b5cea8; }
+    pre .ann { color: #dcdcaa; }
+
+    /* ======================== ALERTAS ======================== */
+    .alert {
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 1.1rem;
+      display: flex;
+      gap: 0.7rem;
+      align-items: flex-start;
+      font-size: 0.9rem;
+    }
+    .alert .icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .alert-info    { background: #e3f2fd; border-left: 4px solid #1565c0; color: #0d47a1; }
+    .alert-warn    { background: #fff3e0; border-left: 4px solid #e65100; color: #bf360c; }
+    .alert-success { background: #e8f5e9; border-left: 4px solid #2e7d32; color: #1b5e20; }
+    .alert-tip     { background: #f9f4e0; border-left: 4px solid var(--arpi-gold); color: var(--arpi-accent); }
+
+    /* ======================== BADGES ======================== */
+    .badge {
+      display: inline-block;
+      padding: 0.18rem 0.55rem;
+      border-radius: 20px;
+      font-size: 0.73rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+    .badge-get    { background: #e3f2fd; color: var(--badge-blue); }
+    .badge-post   { background: #e8f5e9; color: var(--badge-green); }
+    .badge-put    { background: #fff3e0; color: var(--badge-orange); }
+    .badge-delete { background: #fce4ec; color: #c62828; }
+    .badge-gold   { background: #fff8e1; color: var(--arpi-accent); border: 1px solid var(--arpi-gold); }
+    .badge-gray   { background: #eceff1; color: var(--badge-gray); }
+
+    /* ======================== FLUJO PASO A PASO ======================== */
+    .steps { counter-reset: step; margin-bottom: 1.2rem; }
+    .step {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      background: var(--arpi-white);
+      border: 1px solid var(--arpi-gray-light);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .step-num {
+      counter-increment: step;
+      min-width: 34px; height: 34px;
+      background: var(--arpi-gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.95rem; color: #1a1a1a;
+      flex-shrink: 0;
+    }
+    .step-body h4 { font-size: 0.95rem; font-weight: 700; color: var(--arpi-gray-dark); margin-bottom: 0.25rem; }
+    .step-body p  { font-size: 0.87rem; color: var(--arpi-gray-mid); margin: 0; }
+
+    /* ======================== DIAGRAMA FLUJO ======================== */
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+      font-size: 0.85rem;
+    }
+    .flow-box {
+      background: var(--arpi-white);
+      border: 2px solid var(--arpi-gray-light);
+      border-radius: 8px;
+      padding: 0.5rem 0.9rem;
+      font-weight: 600;
+      color: var(--arpi-gray-dark);
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .flow-box.active { border-color: var(--arpi-gold); background: #fff8e1; color: var(--arpi-accent); }
+    .flow-arrow { color: var(--arpi-gold); font-size: 1.1rem; font-weight: 900; }
+
+    /* ======================== LISTA CON CHECK ======================== */
+    .checklist { list-style: none; margin-bottom: 1rem; }
+    .checklist li {
+      padding: 0.35rem 0 0.35rem 1.8rem;
+      position: relative;
+      font-size: 0.9rem;
+      color: var(--arpi-gray-dark);
+    }
+    .checklist li::before {
+      content: '✔';
+      position: absolute; left: 0;
+      color: var(--badge-green);
+      font-weight: 700;
+    }
+
+    /* ======================== ENDPOINT TABLE ROW ======================== */
+    .ep-method { min-width: 65px; }
+    .ep-url    { font-family: monospace; font-size: 0.82rem; color: #1a1a1a; }
+
+    /* ======================== HIGHLIGHT SECTION ======================== */
+    .highlight-box {
+      background: var(--arpi-white);
+      border-left: 5px solid var(--arpi-gold);
+      border-radius: 0 10px 10px 0;
+      padding: 1.1rem 1.4rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .highlight-box h4 { font-size: 0.92rem; font-weight: 700; color: var(--arpi-accent); margin-bottom: 0.4rem; }
+
+    /* ======================== TABLA COLUMNAS DB ======================== */
+    .col-req  { color: #c62828; font-weight: 700; }
+    .col-opt  { color: #546e7a; }
+
+    /* ======================== FOOTER ======================== */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.8rem;
+      color: var(--arpi-gray-mid);
+      border-top: 1px solid var(--arpi-gray-light);
+    }
+
+    /* ======================== RESPONSIVE ======================== */
+    @media (max-width: 900px) {
+      .wrapper { flex-direction: column; }
+      nav.sidebar {
+        width: 100%; min-width: 0; height: auto;
+        position: relative; flex-direction: row; flex-wrap: wrap;
+      }
+      .sidebar-logo { width: 100%; }
+      main.content { padding: 1.4rem 1.2rem 3rem; }
+    }
+    @media (max-width: 600px) {
+      .card-grid { grid-template-columns: 1fr; }
+      .flow { flex-direction: column; align-items: flex-start; }
+      main.content { padding: 1rem 0.8rem 2rem; }
+    }
+
+    /* ======================== PRINT ======================== */
+    @media print {
+      nav.sidebar { display: none; }
+      main.content { padding: 0; max-width: 100%; }
+      .hero { background: #3a3a3a !important; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <h1>ARPI</h1>
+      <p>Manual · Simulación de Negocio</p>
+    </div>
+
+    <div class="sidebar-section-title">Usuario</div>
+    <ul>
+      <li><a href="#s1"><span class="num">1.</span> Introducción</a></li>
+      <li><a href="#s2"><span class="num">2.</span> Acceso al módulo</a></li>
+      <li><a href="#s3"><span class="num">3.</span> Listado de simulaciones</a></li>
+      <li><a href="#s4"><span class="num">4.</span> Crear simulación</a></li>
+      <li><a href="#s5"><span class="num">5.</span> Editar simulación</a></li>
+      <li><a href="#s6"><span class="num">6.</span> Convertir a negocio</a></li>
+      <li><a href="#s7"><span class="num">7.</span> Generar PDF y correo</a></li>
+      <li><a href="#s8"><span class="num">8.</span> Descargar plantillas</a></li>
+      <li><a href="#s9"><span class="num">9.</span> Exportar Excel</a></li>
+      <li><a href="#s10"><span class="num">10.</span> Declinar simulación</a></li>
+    </ul>
+
+    <div class="sidebar-section-title">Configuración Técnica</div>
+    <ul>
+      <li><a href="#c1"><span class="num">11.</span> Arquitectura técnica</a></li>
+      <li><a href="#c2"><span class="num">12.</span> API REST — Endpoints</a></li>
+      <li><a href="#c3"><span class="num">13.</span> Base de datos</a></li>
+      <li><a href="#c4"><span class="num">14.</span> Reporte PDF (Jasper)</a></li>
+      <li><a href="#c5"><span class="num">15.</span> Correo electrónico</a></li>
+      <li><a href="#c6"><span class="num">16.</span> Integración Bitrix24</a></li>
+      <li><a href="#c7"><span class="num">17.</span> Estados de simulación</a></li>
+      <li><a href="#c8"><span class="num">18.</span> Maestras del sistema</a></li>
+      <li><a href="#c9"><span class="num">19.</span> Flujo datos completo</a></li>
+      <li><a href="#c10"><span class="num">20.</span> Errores frecuentes</a></li>
+    </ul>
+
+    <div class="sidebar-section-title">Proyectos y Paquetes</div>
+    <ul>
+      <li><a href="#p1"><span class="num">21.</span> Dónde configurar para Simulación</a></li>
+      <li><a href="#p2"><span class="num">22.</span> El Engranaje ⚙️ — Parámetros</a></li>
+      <li><a href="#p3"><span class="num">23.</span> Módulo Paquetes</a></li>
+      <li><a href="#p4"><span class="num">24.</span> Flujo Proyecto→Paquete→Simulación</a></li>
+      <li><a href="#p5"><span class="num">25.</span> Botones del módulo Proyectos</a></li>
+    </ul>
+  </nav>
+
+  <!-- ==================== CONTENIDO ==================== -->
+  <main class="content">
+
+    <!-- HERO -->
+    <div class="hero">
+      <h1>📊 Simulación de Negocio</h1>
+      <p>Manual completo de usuario y configuración técnica para el módulo de <strong>Simulación de Negocio</strong> del sistema ARPI. Cubre el flujo de trabajo desde la creación hasta la conversión a negocio, la generación de reportes y todos los parámetros configurables.</p>
+      <div class="meta">Versión 2025 &nbsp;|&nbsp; Módulo: <code>newsimulator</code> &nbsp;|&nbsp; Backend: <code>TarpSimulaciones*</code> &nbsp;|&nbsp; Fecha: abril 2026</div>
+    </div>
+
+    <!-- ==================== SECCIÓN 1: INTRODUCCIÓN ==================== -->
+    <section id="s1">
+      <div class="section-header">
+        <div class="icon">📌</div>
+        <h2>1. Introducción</h2>
+      </div>
+      <p>El módulo de <strong>Simulación de Negocio</strong> permite a los asesores comerciales de ARPI modelar escenarios de inversión para un prospecto (inversionista). A partir de la simulación se genera un PDF personalizado, se envía por correo electrónico y, cuando el prospecto decide avanzar, la simulación se convierte automáticamente en un <strong>negocio formal</strong> dentro del sistema.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">👤</div>
+          <h4>Perfilación del inversor</h4>
+          <p>Se capturan datos personales, segmento y perfil de riesgo del prospecto.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎯</div>
+          <h4>Propósitos de inversión</h4>
+          <p>El asesor define los objetivos financieros del cliente (educación, retiro, etc.).</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">💰</div>
+          <h4>Fuentes de ahorro</h4>
+          <p>Registro de los ingresos y ahorros disponibles del prospecto.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <h4>Mejor propuesta (Paquete)</h4>
+          <p>El sistema sugiere el paquete de proyectos más adecuado al perfil.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📅</div>
+          <h4>Forma de pago</h4>
+          <p>Se define el plan de cuotas y pagos para cada proyecto del paquete.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔁</div>
+          <h4>Conversión a negocio</h4>
+          <p>Con un clic la simulación genera negocios reales y su plan de pagos.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 2: ACCESO ==================== -->
+    <section id="s2">
+      <div class="section-header">
+        <div class="icon">🔐</div>
+        <h2>2. Acceso al módulo</h2>
+      </div>
+      <p>El módulo de simulación está disponible en el menú lateral de ARPI bajo la opción <strong>Simulaciones</strong>. La ruta de acceso en el navegador es:</p>
+      <pre><span class="kw">/simulator/simulaciones</span>    <span class="cmt">← Listado de simulaciones</span>
+<span class="kw">/simulator/simulator</span>        <span class="cmt">← Formulario nueva / editar</span></pre>
+
+      <div class="alert alert-info">
+        <span class="icon">ℹ️</span>
+        <div>Para crear o editar simulaciones el usuario debe tener sesión activa en AWS Cognito. El nombre y documento del asesor se obtienen automáticamente de los atributos del usuario autenticado (<code>name</code>, <code>family_name</code>, <code>custom:document</code>).</div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 3: LISTADO ==================== -->
+    <section id="s3">
+      <div class="section-header">
+        <div class="icon">📋</div>
+        <h2>3. Listado de simulaciones</h2>
+      </div>
+      <p>Al ingresar al módulo se muestra una tabla con todas las simulaciones del sistema, filtradas por estado. Las columnas disponibles son:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Columna</th><th>Descripción</th><th>Filtrable</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>N°</td><td>Número secuencial de la simulación (<code>nmsimulacion</code>)</td><td>✔ Búsqueda por texto</td></tr>
+            <tr><td>Nombre</td><td>Nombre completo del prospecto (persona natural o razón social)</td><td>✔ Búsqueda por texto</td></tr>
+            <tr><td>Documento</td><td>Documento de identidad o NIT</td><td>✔ Búsqueda por texto</td></tr>
+            <tr><td>Correo</td><td>Email del prospecto</td><td>✔ Búsqueda por texto</td></tr>
+            <tr><td>Asesor</td><td>Nombre del consultor que creó la simulación</td><td>✔ Búsqueda por texto</td></tr>
+            <tr><td>Paquete</td><td>Nombre del paquete de inversión seleccionado</td><td>✔ Búsqueda por texto</td></tr>
+            <tr><td>Fecha</td><td>Fecha de creación de la simulación</td><td>✔ Búsqueda por texto</td></tr>
+            <tr><td>Origen</td><td>N° de simulación de origen si fue derivada</td><td>✔ Búsqueda por texto</td></tr>
+            <tr><td>Total inversión</td><td>Valor total de la inversión simulada (COP)</td><td>✗</td></tr>
+            <tr><td>Aspiración renta</td><td>Renta mensual esperada por el inversionista (COP)</td><td>✗</td></tr>
+            <tr><td>Acciones</td><td>Botones de operación sobre la simulación</td><td>✗</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>Filtro por Estado</h3>
+        <p>Encima de la tabla hay un selector de <strong>Estado</strong> que permite filtrar las simulaciones. Los estados disponibles están definidos en el archivo de entorno del frontend (<code>environment.ESTADO_SIMULACION</code>):</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Código</th><th>Descripción</th><th>Significado</th></tr></thead>
+            <tbody>
+              <tr><td>A</td><td>Activa</td><td>Simulación en proceso o pendiente de decisión</td></tr>
+              <tr><td>F</td><td>Finalizada / Aprobada</td><td>Se convirtió exitosamente en negocio</td></tr>
+              <tr><td>D</td><td>Desistida / Declinada</td><td>El prospecto rechazó la propuesta</td></tr>
+              <tr><td>I</td><td>Inactiva</td><td>Eliminada lógicamente del sistema</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Botones de acción por fila</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Ícono</th><th>Acción</th><th>Descripción</th></tr></thead>
+            <tbody>
+              <tr><td>🗑️ delete</td><td>Declinar simulación</td><td>Solo visible en estado <span class="badge badge-gold">A</span>. Cambia el estado a <code>D</code></td></tr>
+              <tr><td>📊 bar_chart</td><td>Descargar plantilla proyectos</td><td>Genera un .docx por cada proyecto de la simulación</td></tr>
+              <tr><td>⬇️ download</td><td>Descargar plantilla general</td><td>Abre modal para seleccionar plantilla del grupo "Simulador"</td></tr>
+              <tr><td>▶️ skip_next</td><td>Convertir a negocio</td><td>Procesa la simulación y crea los negocios correspondientes</td></tr>
+              <tr><td>✏️ edit</td><td>Editar simulación</td><td>Abre el formulario de edición con los datos precargados</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 4: CREAR SIMULACIÓN ==================== -->
+    <section id="s4">
+      <div class="section-header">
+        <div class="icon">➕</div>
+        <h2>4. Crear una nueva simulación</h2>
+      </div>
+      <p>Para crear una simulación haga clic en el botón <strong>"Iniciar simulación"</strong> en la parte superior del listado. El sistema lo llevará al formulario multisección organizado en pestañas (tabs). Cada pestaña se habilita progresivamente conforme se completan los datos requeridos.</p>
+
+      <div class="flow">
+        <div class="flow-box active">👤 Datos del<br>Inversionista</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">🧠 Perfilación</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">🎯 Propósitos</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">💰 Fuentes de<br>Ahorro</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">📦 Mejor<br>Propuesta</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">📅 Forma de<br>Pago</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">💾 Guardar</div>
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h4>Pestaña 1 — Datos del Inversionista</h4>
+            <p>Seleccione el tipo de persona (<strong>Natural</strong> o <strong>Jurídica</strong>). Ingrese nombre, apellidos, teléfono y correo. Use el botón <strong>Buscar</strong> para consultar si el contacto ya existe en el sistema (Bitrix). Si no existe, se abre el formulario de creación de contacto. Una vez localizado el contacto, la pestaña de Perfilación se activa.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h4>Pestaña 2 — Perfilación</h4>
+            <p>Se presentan las preguntas de perfil del inversionista obtenidas de la maestra <code>PERFILACIONES</code>. Todas las preguntas deben ser respondidas para habilitar la siguiente pestaña. Los tipos de respuesta son: <em>Lista</em> (combo) u <em>Objetos</em> (selección de ítem).</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h4>Pestaña 3 — Propósitos</h4>
+            <p>Seleccione uno o más propósitos de inversión del listado. Para cada propósito se captura: <em>Tiempo para cumplirlo</em>, <em>Valor aproximado</em> y <em>Cantidad de unidades</em>. Al completar todos los campos, se habilita la siguiente pestaña.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h4>Pestaña 4 — Fuentes de Ahorro</h4>
+            <p>Se registran los ingresos y ahorros periódicos del prospecto. Para cada fuente se define: <em>Valor</em> y <em>Frecuencia</em> (mensual, trimestral, etc.). Los códigos de las fuentes seleccionadas se almacenan en <code>jsfuentesdeahorro</code> y en el campo <code>fahorros</code> para integración con Bitrix24.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h4>Pestaña 5 — Mejor Propuesta (Paquete)</h4>
+            <p>El sistema muestra los paquetes de proyectos disponibles según el perfil del cliente. El asesor selecciona el paquete más adecuado. Cada paquete incluye uno o más proyectos con sus valores, número de ARPIs disponibles y condiciones.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <h4>Pestaña 6 — Forma de Pago</h4>
+            <p>Se define el plan de cuotas para cada proyecto del paquete. Se calculan el total de inversión (<code>nmtotalinversion</code>), el ajuste de forma de pago (<code>nmajusteformapago</code>) y el total a pagar (<code>nmtotalapagar</code>). El plan se almacena en formato JSON en el campo <code>jsformadepago</code>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-body">
+            <h4>Guardar la simulación</h4>
+            <p>Al hacer clic en <strong>Guardar</strong>, el sistema solicita confirmación. Si se confirma, se llama al API <code>POST /api/TarpSimulaciones</code>. El backend registra la simulación, crea el deal en Bitrix24 e integra los IDs obtenidos en el JSON de proyectos. Al finalizar, el sistema redirige al listado de simulaciones.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="alert alert-tip">
+        <span class="icon">💡</span>
+        <div><strong>Datos adicionales en la primera pestaña:</strong> también puede registrar la <em>Fecha de reunión</em>, el canal por el cual el prospecto conoció a ARPI (<em>Cómo nos conoció</em>) y el nombre de la persona que lo refirió (<em>Referido por</em>).</div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 5: EDITAR ==================== -->
+    <section id="s5">
+      <div class="section-header">
+        <div class="icon">✏️</div>
+        <h2>5. Editar una simulación existente</h2>
+      </div>
+      <p>Desde el listado, haga clic en el ícono <strong>edit (✏️)</strong> de la fila deseada. El sistema carga el formulario con todos los datos precargados:</p>
+      <ul class="checklist">
+        <li>Datos del inversionista (tipo persona natural/jurídica)</li>
+        <li>Perfilación previamente registrada</li>
+        <li>Propósitos seleccionados con sus valores</li>
+        <li>Fuentes de ahorro con valores y frecuencias</li>
+        <li>Paquete seleccionado con los valores de proyectos</li>
+        <li>Forma de pago (cuotas por proyecto)</li>
+      </ul>
+      <div class="alert alert-warn">
+        <span class="icon">⚠️</span>
+        <div>Al guardar una simulación editada el sistema guarda una <strong>nueva simulación</strong> vinculada a la original mediante el campo <code>nmsimulacionOrigen</code>. La simulación original <strong>no se modifica</strong>, permitiendo trazabilidad histórica completa.</div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 6: CONVERTIR A NEGOCIO ==================== -->
+    <section id="s6">
+      <div class="section-header">
+        <div class="icon">🔁</div>
+        <h2>6. Convertir simulación a negocio</h2>
+      </div>
+      <p>Esta es la función más importante del módulo. Al hacer clic en el botón <strong>▶️ (skip_next)</strong>, el sistema:</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h4>Selección del vendedor por proyecto</h4>
+            <p>Se abre un modal donde se selecciona el <strong>inversionista-vendedor</strong> para cada proyecto incluido en la simulación. Esto determina de quién compra cada ARPI el nuevo inversor.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h4>Confirmación</h4>
+            <p>El sistema solicita confirmación antes de proceder: <em>"¿Desea convertir la simulación en negocio?"</em></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h4>Validaciones en el backend</h4>
+            <p>Se valida que el email del prospecto exista como inversionista y que el documento del consultor exista como vendedor. Si alguna validación falla, se muestra el error específico sin crear ningún negocio.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h4>Creación de negocios</h4>
+            <p>Por cada proyecto del paquete con cantidad mayor a 0 y sin negocio previo (<code>cdunicnegocio</code> vacío), se crea un registro en <code>tarp_negocios</code> con estado <code>C</code> y operación <code>VENTA</code>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h4>Plan de pagos</h4>
+            <p>Para cada negocio creado, el sistema genera automáticamente el plan de pagos en <code>tarp_planpagos_negociacion</code> a partir del JSON de forma de pago de la simulación.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <h4>Actualización de la simulación</h4>
+            <p>El estado de la simulación se cambia a <code>F</code> (Finalizada) y el JSON de valores de proyectos se actualiza con los <code>cdunicnegocio</code> de cada negocio creado.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-success">
+        <span class="icon">✅</span>
+        <div>Si el proceso es exitoso, se muestra <em>"Negocio generado correctamente"</em>. Si algún proyecto ya tenía negocio creado, el mensaje advierte sobre ello sin considerarlo un error fatal.</div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 7: PDF Y CORREO ==================== -->
+    <section id="s7">
+      <div class="section-header">
+        <div class="icon">📧</div>
+        <h2>7. Generar PDF y enviar por correo</h2>
+      </div>
+
+      <div class="subsection">
+        <h3>Generar PDF de simulación</h3>
+        <p>Desde el listado, use el botón de descarga (<strong>⬇️</strong> → seleccione plantilla "Simulador") o desde el interior del formulario. El PDF se genera con el reporte Jasper <code>reporteSimulacionPDF.jasper</code> usando el parámetro <code>p_nmsimulacion</code>.</p>
+        <div class="highlight-box">
+          <h4>Endpoint:</h4>
+          <code>GET /api/TarpSimulaciones/getSimulacionPdf/{id}</code>
+          <p style="font-size:0.85rem;margin-top:0.4rem;">Retorna un arreglo de bytes (Base64) con el PDF listo para descarga.</p>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Envío por correo electrónico</h3>
+        <p>El sistema envía un correo al email del inversionista adjuntando el PDF generado. El correo usa la plantilla Thymeleaf <code>simulacion.html</code> con los siguientes datos dinámicos:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Variable Thymeleaf</th><th>Descripción</th><th>Origen</th></tr></thead>
+            <tbody>
+              <tr><td><code>${fecha}</code></td><td>Fecha actual en español (Colombia)</td><td>Generado en backend</td></tr>
+              <tr><td><code>${nmsimulacion}</code></td><td>Número de la simulación</td><td><code>tarp_simulaciones.nmsimulacion</code></td></tr>
+              <tr><td><code>${nombre}</code></td><td>Nombre del prospecto</td><td>Natural: <code>dsnombres + dsapellidos</code> / Jurídica: <code>razonSocialPerJuridica</code></td></tr>
+              <tr><td><code>${email}</code></td><td>Correo del prospecto</td><td>Natural: <code>dsemail</code> / Jurídica: <code>emailPerJuridica</code></td></tr>
+              <tr><td><code>${telefono}</code></td><td>Teléfono del prospecto</td><td>Natural: <code>dstelefono</code> / Jurídica: <code>telPerJuridica</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="highlight-box">
+          <h4>Endpoint:</h4>
+          <code>GET /api/TarpSimulaciones/sendMailSimulacion/{id}</code>
+        </div>
+        <div class="alert alert-info">
+          <span class="icon">ℹ️</span>
+          <div>El asunto del correo es fijo: <strong>"SIMULACION COMPRA DE ARPIS"</strong>. El correo siempre se envía a <code>simulacion.getDsemail()</code> independientemente del tipo de inversionista.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 8: PLANTILLAS ==================== -->
+    <section id="s8">
+      <div class="section-header">
+        <div class="icon">📄</div>
+        <h2>8. Descargar plantillas</h2>
+      </div>
+      <p>Existen dos tipos de plantillas descargables desde el listado:</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">📁</div>
+          <h4>Plantilla general del simulador</h4>
+          <p>Genera documentos .docx del grupo "Simulador". Se abre un modal para elegir la plantilla deseada. El API invocado es <code>POST /api/TarpReportes/SimuladorPlantilla</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📂</div>
+          <h4>Plantilla por proyecto</h4>
+          <p>Genera un .docx específico por cada proyecto de la simulación usando el endpoint de plantilla de proyecto. Se descarga automáticamente un archivo por proyecto.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 9: EXPORTAR EXCEL ==================== -->
+    <section id="s9">
+      <div class="section-header">
+        <div class="icon">📊</div>
+        <h2>9. Exportar a Excel</h2>
+      </div>
+      <p>En la parte inferior del listado hay un botón <strong>XLS</strong> que exporta las simulaciones visibles (según el filtro de estado activo) a un archivo Excel (.xlsx). Las columnas exportadas son:</p>
+      <ul class="checklist">
+        <li>N°, Nombre, Documento, Email, Asesor, Paquete</li>
+        <li>Fecha de creación, N° Simulación Origen</li>
+        <li>Total inversión, Aspiración renta, Estado</li>
+      </ul>
+      <div class="alert alert-tip">
+        <span class="icon">💡</span>
+        <div>El nombre del archivo Excel varía según el estado activo: <code>Simulaciones_Activas.xlsx</code>, <code>Simulaciones_Desistidas.xlsx</code> o <code>Simulaciones_Aprobadas.xlsx</code>.</div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 10: DECLINAR ==================== -->
+    <section id="s10">
+      <div class="section-header">
+        <div class="icon">🗑️</div>
+        <h2>10. Declinar simulación</h2>
+      </div>
+      <p>El botón <strong>delete (🗑️)</strong> solo es visible para simulaciones en estado <span class="badge badge-gold">A</span> (Activa). Al hacer clic, el sistema cambia el estado de la simulación a <code>D</code> (Desistida) llamando al endpoint <code>POST /api/TarpSimulaciones/saveOrUpdate</code>.</p>
+      <div class="alert alert-warn">
+        <span class="icon">⚠️</span>
+        <div>Esta acción no elimina los datos de la simulación de la base de datos. Únicamente cambia el campo <code>cdestado</code> a <code>D</code>. La simulación sigue siendo consultable filtrando por estado "Desistida".</div>
+      </div>
+    </section>
+
+    <!-- ========== SEPARADOR TÉCNICO ========== -->
+    <div style="margin: 3rem 0 2rem; text-align: center; position: relative;">
+      <hr style="border: none; border-top: 2px dashed var(--arpi-gold); margin: 0;">
+      <span style="position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--arpi-bg); padding:0 1rem; font-size:0.85rem; color:var(--arpi-gold); font-weight:700; letter-spacing:1px;">⚙️ SECCIÓN TÉCNICA DE CONFIGURACIÓN ⚙️</span>
+    </div>
+
+    <!-- ==================== SECCIÓN 11: ARQUITECTURA ==================== -->
+    <section id="c1">
+      <div class="section-header">
+        <div class="icon">🏗️</div>
+        <h2>11. Arquitectura técnica del módulo</h2>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Capa</th><th>Componente / Clase</th><th>Ubicación</th><th>Responsabilidad</th></tr></thead>
+          <tbody>
+            <tr><td>Frontend – Listado</td><td><code>SimulacionesComponent</code></td><td><code>modules/newsimulator/components/simulaciones/</code></td><td>Tabla de simulaciones, filtros, acciones</td></tr>
+            <tr><td>Frontend – Formulario</td><td><code>SimulatorComponent</code></td><td><code>modules/newsimulator/components/simulator/</code></td><td>Wizard de creación/edición de simulación</td></tr>
+            <tr><td>Frontend – Perfilación</td><td><code>PerfilacionComponent</code></td><td><code>components/perfilacion/</code></td><td>Cuestionario de segmento e inversión</td></tr>
+            <tr><td>Frontend – Propósitos</td><td><code>PropositoComponent</code></td><td><code>components/proposito/</code></td><td>Selección de objetivos de inversión</td></tr>
+            <tr><td>Frontend – Fuentes Ahorro</td><td><code>FuentesAhorrInverComponent</code></td><td><code>components/fuentes-ahorr-inver/</code></td><td>Registro de ingresos/ahorros</td></tr>
+            <tr><td>Frontend – Paquetes</td><td><code>MejorPropuestaComponent</code></td><td><code>components/mejor-propuesta/</code></td><td>Selección de paquete de inversión</td></tr>
+            <tr><td>Frontend – Forma Pago</td><td><code>EdicionInverFpagoComponent</code></td><td><code>components/edicion-inver-fpago/</code></td><td>Plan de cuotas por proyecto</td></tr>
+            <tr><td>Frontend – Servicio</td><td><code>SimuladorService</code></td><td><code>services/simulador/simulador.service.ts</code></td><td>Todas las llamadas HTTP al backend</td></tr>
+            <tr><td>Backend – Controller</td><td><code>TarpSimulacionesController</code></td><td><code>controller/</code></td><td>Endpoints REST</td></tr>
+            <tr><td>Backend – Service</td><td><code>TarpSimulacionesServiceImpl</code></td><td><code>service/</code></td><td>Lógica de negocio, correos, conversión</td></tr>
+            <tr><td>Backend – DAO</td><td><code>TarpSimulacionesDAOImpl</code></td><td><code>dao/</code></td><td>Queries JDBC a MySQL</td></tr>
+            <tr><td>Backend – DTO</td><td><code>TarpSimulaciones</code></td><td><code>dto/</code></td><td>Objeto de transferencia de datos</td></tr>
+            <tr><td>Backend – Mapper</td><td><code>TarpSimulacionesMapper</code></td><td><code>mapper/</code></td><td>Mapeo ResultSet → DTO</td></tr>
+            <tr><td>Backend – Reglas</td><td><code>TarpSimulacionRulerImpl</code></td><td><code>ruler/</code></td><td>Cálculos: total ARPIs, fuentes ahorro</td></tr>
+            <tr><td>Backend – Reporte</td><td><code>MgrReportSimulacionImpl</code></td><td><code>process/</code></td><td>Genera PDF con JasperReports</td></tr>
+            <tr><td>Backend – Email Tmpl.</td><td><code>simulacion.html</code></td><td><code>resources/templates/</code></td><td>Plantilla Thymeleaf del correo</td></tr>
+            <tr><td>Base de datos</td><td><code>tarp_simulaciones</code></td><td>MySQL</td><td>Almacenamiento de simulaciones</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 12: API REST ==================== -->
+    <section id="c2">
+      <div class="section-header">
+        <div class="icon">🔌</div>
+        <h2>12. API REST — Endpoints disponibles</h2>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th class="ep-method">Método</th><th>URL</th><th>Descripción</th><th>Autenticado</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-get">GET</span></td>
+              <td class="ep-url">/api/TarpSimulaciones</td>
+              <td>Obtiene todas las simulaciones</td>
+              <td>✔</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-get">GET</span></td>
+              <td class="ep-url">/api/TarpSimulaciones/{id}</td>
+              <td>Obtiene una simulación por ID</td>
+              <td>✔</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-post">POST</span></td>
+              <td class="ep-url">/api/TarpSimulaciones</td>
+              <td>Crea una nueva simulación (con integración Bitrix)</td>
+              <td>✔</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-put">PUT</span></td>
+              <td class="ep-url">/api/TarpSimulaciones</td>
+              <td>Actualiza una simulación existente</td>
+              <td>✔</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-delete">DELETE</span></td>
+              <td class="ep-url">/api/TarpSimulaciones/{id}</td>
+              <td>Eliminación lógica (cambia cdestado a 'I')</td>
+              <td>✔</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-post">POST</span></td>
+              <td class="ep-url">/api/TarpSimulaciones/saveOrUpdate<br>/api-movil/public/TarpSimulaciones/saveOrUpdate</td>
+              <td>Inserta o actualiza según si existe el ID</td>
+              <td>Mixto</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-get">GET</span></td>
+              <td class="ep-url">/api/TarpSimulaciones/getSimulacionPdf/{id}</td>
+              <td>Genera y retorna el PDF de la simulación (Base64)</td>
+              <td>✔</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-get">GET</span></td>
+              <td class="ep-url">/api/TarpSimulaciones/sendMailSimulacion/{id}</td>
+              <td>Genera PDF y lo envía al correo del inversionista</td>
+              <td>✔</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-post">POST</span></td>
+              <td class="ep-url">/api/TarpSimulaciones/simulaciones_filter</td>
+              <td>Búsqueda avanzada por nombre, documento, NIT, razón social</td>
+              <td>✔</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-post">POST</span></td>
+              <td class="ep-url">/api/TarpSimulaciones/simulacionNegocio</td>
+              <td>Convierte una simulación en negocios formales</td>
+              <td>✔</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-get">GET</span></td>
+              <td class="ep-url">/api/TarpSimulaciones/simulacionesbytate/{id}</td>
+              <td>Obtiene simulaciones filtradas por estado (A, F, D, I)</td>
+              <td>✔</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>Endpoint especial — Plantillas de documentos</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th class="ep-method">Método</th><th>URL</th><th>Descripción</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-post">POST</span></td>
+                <td class="ep-url">/api/TarpReportes/SimuladorPlantilla</td>
+                <td>Genera plantilla(s) .docx del grupo "Simulador" para una simulación</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 13: BASE DE DATOS ==================== -->
+    <section id="c3">
+      <div class="section-header">
+        <div class="icon">🗄️</div>
+        <h2>13. Base de datos — Tabla <code>tarp_simulaciones</code></h2>
+      </div>
+      <p>Esta es la tabla principal del módulo. A continuación se describen todos los campos:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Req.</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td>nmsimulacion</td><td>BIGINT PK AUTO</td><td class="col-req">✔</td><td>Identificador único de la simulación</td></tr>
+            <tr><td>dtfechacreacion</td><td>DATETIME</td><td class="col-req">✔</td><td>Fecha y hora de creación (auto: <code>now()</code>)</td></tr>
+            <tr><td>tipoInversionista</td><td>VARCHAR</td><td class="col-opt">—</td><td><code>0</code> = Persona natural / <code>1</code> = Persona jurídica</td></tr>
+            <tr><td>cddocumento</td><td>VARCHAR(20)</td><td class="col-req">✔</td><td>Número de documento de identidad (persona natural)</td></tr>
+            <tr><td>dsnombres</td><td>VARCHAR(50)</td><td class="col-req">✔</td><td>Nombres del prospecto (persona natural)</td></tr>
+            <tr><td>dsapellidos</td><td>VARCHAR(50)</td><td class="col-opt">—</td><td>Apellidos del prospecto</td></tr>
+            <tr><td>dstelefono</td><td>VARCHAR(50)</td><td class="col-opt">—</td><td>Teléfono (persona natural)</td></tr>
+            <tr><td>dsemail</td><td>VARCHAR(120)</td><td class="col-req">✔</td><td>Correo electrónico (persona natural)</td></tr>
+            <tr><td>nitPerJuridica</td><td>VARCHAR</td><td class="col-opt">—</td><td>NIT de la empresa (persona jurídica)</td></tr>
+            <tr><td>razonSocialPerJuridica</td><td>VARCHAR</td><td class="col-opt">—</td><td>Razón social de la empresa</td></tr>
+            <tr><td>telPerJuridica</td><td>VARCHAR</td><td class="col-opt">—</td><td>Teléfono de la empresa</td></tr>
+            <tr><td>emailPerJuridica</td><td>VARCHAR</td><td class="col-opt">—</td><td>Correo de la empresa</td></tr>
+            <tr><td>cdtipodocumentoPerReprLegal</td><td>VARCHAR</td><td class="col-opt">—</td><td>Tipo de doc. del representante legal</td></tr>
+            <tr><td>documentoPerReprLegal</td><td>VARCHAR</td><td class="col-opt">—</td><td>N° documento del representante legal</td></tr>
+            <tr><td>nombrePerReprLegal</td><td>VARCHAR</td><td class="col-opt">—</td><td>Nombre del representante legal</td></tr>
+            <tr><td>apellidoPerReprLegal</td><td>VARCHAR</td><td class="col-opt">—</td><td>Apellidos del representante legal</td></tr>
+            <tr><td>dsconsultor</td><td>VARCHAR(120)</td><td class="col-req">✔</td><td>Nombre del asesor que creó la simulación</td></tr>
+            <tr><td>dsconsultorDocumento</td><td>VARCHAR(20)</td><td class="col-opt">—</td><td>Documento del asesor (para búsqueda en <code>tarp_vendedores</code>)</td></tr>
+            <tr><td>dscomonosconocio</td><td>VARCHAR(120)</td><td class="col-opt">—</td><td>Canal de captación del prospecto</td></tr>
+            <tr><td>dsreferido</td><td>VARCHAR(120)</td><td class="col-opt">—</td><td>Nombre del referido</td></tr>
+            <tr><td>dsvalorpagoarpi</td><td>VARCHAR(20)</td><td class="col-opt">—</td><td>Valor de pago por ARPI (referencia)</td></tr>
+            <tr><td>jsperfilacion</td><td>JSON TEXT</td><td class="col-opt">—</td><td>Respuestas del cuestionario de perfilación</td></tr>
+            <tr><td>jspropositos</td><td>JSON TEXT</td><td class="col-opt">—</td><td>Propósitos seleccionados con sus valores</td></tr>
+            <tr><td>jsfuentesdeahorro</td><td>JSON TEXT</td><td class="col-opt">—</td><td>Fuentes de ahorro con valores y frecuencias</td></tr>
+            <tr><td>jsvaloresproyectos</td><td>JSON TEXT</td><td class="col-req">✔</td><td>Proyectos del paquete con cantidades, valores y IDs de negocio</td></tr>
+            <tr><td>jsformadepago</td><td>JSON TEXT</td><td class="col-opt">—</td><td>Plan de cuotas por proyecto y mes</td></tr>
+            <tr><td>nmpaquete</td><td>BIGINT FK</td><td class="col-req">✔</td><td>ID del paquete de inversión seleccionado</td></tr>
+            <tr><td>nmaspiracionpatrimonial</td><td>DOUBLE</td><td class="col-opt">—</td><td>Aspiración de patrimonio del inversionista</td></tr>
+            <tr><td>nmaspiracionprenta</td><td>DOUBLE</td><td class="col-opt">—</td><td>Aspiración de renta mensual</td></tr>
+            <tr><td>nmtotalinversion</td><td>DOUBLE</td><td class="col-req">✔</td><td>Total de inversión calculado</td></tr>
+            <tr><td>nmdescuento</td><td>DOUBLE</td><td class="col-opt">—</td><td>Descuento aplicado</td></tr>
+            <tr><td>nmajusteformapago</td><td>DOUBLE</td><td class="col-req">✔</td><td>Ajuste por forma de pago</td></tr>
+            <tr><td>nmtotalapagar</td><td>DOUBLE</td><td class="col-req">✔</td><td>Total real a pagar (incluye ajuste)</td></tr>
+            <tr><td>cdestado</td><td>VARCHAR(20)</td><td class="col-req">✔</td><td>Estado: A=Activa, F=Finalizada, D=Declinada, I=Inactiva</td></tr>
+            <tr><td>cdtipodocumentoPerNatural</td><td>VARCHAR</td><td class="col-opt">—</td><td>Tipo de documento (CC, CE, Pasaporte…)</td></tr>
+            <tr><td>nmsimulacionOrigen</td><td>BIGINT</td><td class="col-opt">—</td><td>ID de la simulación de origen (para trazabilidad de ediciones)</td></tr>
+            <tr><td>cdunicontacto</td><td>VARCHAR(150)</td><td class="col-req">✔</td><td>ID único del contacto en Bitrix24</td></tr>
+            <tr><td>dtfechareunion</td><td>DATE</td><td class="col-opt">—</td><td>Fecha de la reunión con el prospecto</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>Consulta SQL principal (SELECT usado por el DAO)</h3>
+        <p>El SELECT del DAO une la tabla de simulaciones con <code>tarp_paquetes</code> y <code>tarp_contactos</code> para obtener los datos actualizados del contacto Bitrix:</p>
+        <pre><span class="kw">SELECT</span> s.nmsimulacion, s.dtfechacreacion, s.cddocumento,
+  <span class="cmt">-- Teléfono: usa Bitrix si hay contacto, sino el valor guardado</span>
+  <span class="kw">if</span>(s.cdunicontacto = <span class="str">''</span>, dstelefono,
+     IF(c.jsdata ->><span class="str">'$.PHONE[0].VALUE'</span> = <span class="str">'null'</span>, <span class="str">' '</span>,
+        jsdata ->><span class="str">'$.PHONE[0].VALUE'</span>)) <span class="kw">as</span> dstelefono,
+  <span class="cmt">-- Email: usa Bitrix si hay contacto</span>
+  <span class="kw">if</span>(s.cdunicontacto = <span class="str">''</span>, dsemail,
+     IF(c.jsdata ->><span class="str">'$.EMAIL[0].VALUE'</span> = <span class="str">'null'</span>, <span class="str">' '</span>,
+        jsdata ->><span class="str">'$.EMAIL[0].VALUE'</span>)) <span class="kw">as</span> dsemail,
+  s.dsconsultor, s.jsperfilacion, s.jspropositos,
+  s.jsfuentesdeahorro, s.jsvaloresproyectos, s.jsformadepago,
+  <span class="cmt">-- Nombre: usa Bitrix si hay contacto</span>
+  <span class="kw">if</span>(s.cdunicontacto = <span class="str">''</span>,
+     concat(s.dsnombres,<span class="str">' '</span>, ifnull(s.dsapellidos,<span class="str">''</span>)),
+     concat(c.jsdata ->><span class="str">'$.NAME'</span>,<span class="str">' '</span>,
+     IF(c.jsdata ->><span class="str">'$.SECOND_NAME'</span>=<span class="str">'null'</span>,<span class="str">' '</span>,
+        jsdata ->><span class="str">'$.SECOND_NAME'</span>))) <span class="kw">as</span> dsnombres,
+  (if(tipoInversionista = <span class="num">1</span>, nitPerJuridica, cddocumento)) <span class="kw">as</span> dsdocumento,
+  pq.dspaquete
+<span class="kw">FROM</span> tarp_simulaciones s
+<span class="kw">INNER JOIN</span> tarp_paquetes pq <span class="kw">ON</span> s.nmpaquete = pq.nmpaquete
+<span class="kw">LEFT JOIN</span>  tarp_contactos c  <span class="kw">ON</span> s.cdunicontacto = c.cdunicontacto
+<span class="kw">WHERE</span> s.cdestado = <span class="str">'A'</span>
+<span class="kw">ORDER BY</span> s.nmsimulacion <span class="kw">DESC</span>;</pre>
+      </div>
+
+      <div class="subsection">
+        <h3>Tabla relacionada: <code>tarp_planpagos_negociacion</code></h3>
+        <p>Cuando se convierte a negocio, por cada cuota del <code>jsformadepago</code> con valor positivo se inserta un registro en esta tabla:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Campo</th><th>Descripción</th></tr></thead>
+            <tbody>
+              <tr><td>cdunicnegocio</td><td>ID del negocio creado</td></tr>
+              <tr><td>fecompromiso</td><td>Fecha de la cuota (tomada del JSON de forma de pago)</td></tr>
+              <tr><td>nmanomes</td><td>Año+Mes en formato YYYYMM</td></tr>
+              <tr><td>vrcomprometido</td><td>Valor de la cuota del proyecto en esa fecha</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 14: JASPER ==================== -->
+    <section id="c4">
+      <div class="section-header">
+        <div class="icon">📑</div>
+        <h2>14. Reporte PDF — JasperReports</h2>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Elemento</th><th>Valor / Ubicación</th></tr></thead>
+          <tbody>
+            <tr><td>Archivo .jasper</td><td><code>src/main/resources/reporteSimulacionPDF.jasper</code></td></tr>
+            <tr><td>Clase generadora</td><td><code>MgrReportSimulacionImpl.java</code></td></tr>
+            <tr><td>Parámetro de entrada</td><td><code>p_nmsimulacion</code> (Long) — Número de la simulación</td></tr>
+            <tr><td>Acceso a datos</td><td>El reporte accede directamente a la base de datos vía conexión JDBC</td></tr>
+            <tr><td>Formato de salida</td><td>PDF (byte[])</td></tr>
+            <tr><td>Nombre del archivo descargado</td><td><code>simulacion{id}.pdf</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-tip">
+        <span class="icon">💡</span>
+        <div><strong>Para modificar el diseño del PDF:</strong> Edite el archivo <code>.jrxml</code> correspondiente usando JasperSoft Studio, luego compile a <code>.jasper</code> y reemplace el archivo en <code>src/main/resources/</code>. No olvide reconstruir el proyecto con <code>mvn package</code>.</div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 15: CORREO ==================== -->
+    <section id="c5">
+      <div class="section-header">
+        <div class="icon">📧</div>
+        <h2>15. Configuración del correo electrónico</h2>
+      </div>
+
+      <div class="subsection">
+        <h3>Plantilla de correo</h3>
+        <p>Ubicación: <code>arpi-back/src/main/resources/templates/simulacion.html</code></p>
+        <p>Esta es la plantilla Thymeleaf que define el cuerpo del correo. Para modificar el texto del email, edite este archivo. Las variables dinámicas disponibles son: <code>fecha</code>, <code>nmsimulacion</code>, <code>nombre</code>, <code>email</code>, <code>telefono</code>.</p>
+      </div>
+
+      <div class="subsection">
+        <h3>Configuración del servidor SMTP</h3>
+        <p>La configuración del servidor de correo se encuentra en los archivos de propiedades de Spring Boot:</p>
+        <pre><span class="cmt"># application.properties / application-dev.properties</span>
+spring.mail.host=<span class="str">smtp.tudominio.com</span>
+spring.mail.port=<span class="num">587</span>
+spring.mail.username=<span class="str">correo@tudominio.com</span>
+spring.mail.password=<span class="str">tu_contraseña</span>
+spring.mail.properties.mail.smtp.auth=<span class="kw">true</span>
+spring.mail.properties.mail.smtp.starttls.enable=<span class="kw">true</span></pre>
+        <p>Ubicación del archivo: <code>arpi-back/src/main/resources/application.properties</code> (o <code>application-dev.properties</code> para el entorno de desarrollo).</p>
+      </div>
+
+      <div class="subsection">
+        <h3>Clase de envío de correos</h3>
+        <p>Clase: <code>GestionCorreos.java</code> — Método: <code>sendMailGeneric()</code></p>
+        <p>Este método recibe el HTML procesado, el asunto, el destinatario, el adjunto y el nombre del archivo adjunto. Para la simulación, el destinatario siempre es <code>simulacion.getDsemail()</code> (email persona natural).</p>
+      </div>
+
+      <div class="alert alert-warn">
+        <span class="icon">⚠️</span>
+        <div><strong>Nota importante:</strong> Existe un error de comparación de String en el código actual. En el método <code>sendMailSimulacion</code> la comparación <code>tipoInv == "1"</code> siempre es <code>false</code> en Java (debe usarse <code>.equals("1")</code>). Por ello, el correo <strong>siempre</strong> usa los datos de persona natural (<code>dsnombres</code>, <code>dsemail</code>), independientemente del tipo de inversionista. Esto debe corregirse si se requiere soportar personas jurídicas.</div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 16: BITRIX ==================== -->
+    <section id="c6">
+      <div class="section-header">
+        <div class="icon">🔗</div>
+        <h2>16. Integración con Bitrix24</h2>
+      </div>
+
+      <p>Al crear una simulación (endpoint <code>POST /api/TarpSimulaciones</code>), el backend crea automáticamente un <strong>Deal (negocio)</strong> en Bitrix24 para cada proyecto incluido. El flujo es:</p>
+
+      <div class="flow">
+        <div class="flow-box active">Guardar simulación</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">Identificar webhook<br>en tarp_integraciones</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">Ejecutar integración<br>Bitrix (deal)</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">Guardar ID deal<br>en jsvaloresproyectos</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">Actualizar simulación<br>en BD</div>
+      </div>
+
+      <div class="subsection">
+        <h3>Webhooks configurados</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Constante</th><th>Cuándo se usa</th><th>Descripción</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>Constantes.WEBHOOKSIMULACION[0]</code></td>
+                <td>Cuando <code>iddealbitrix</code> es vacío o 0</td>
+                <td>Crea un nuevo Deal en Bitrix24 para el proyecto</td>
+              </tr>
+              <tr>
+                <td><code>Constantes.WEBHOOKSIMULACION[1]</code></td>
+                <td>Cuando ya existe un <code>iddealbitrix</code></td>
+                <td>Actualiza el Deal existente en Bitrix24</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="alert alert-info">
+          <span class="icon">ℹ️</span>
+          <div>Los webhooks se consultan en la tabla <code>tarp_integraciones_metodos</code> usando el valor de la constante como código maestro. Para cambiar la URL del webhook, modifique el registro correspondiente en esa tabla.</div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Campo <code>iddealbitrix</code> en jsvaloresproyectos</h3>
+        <p>Cada elemento del JSON de proyectos almacena el ID del Deal de Bitrix24 correspondiente. Este ID se usa posteriormente al convertir la simulación a negocio para vincular ambos sistemas.</p>
+        <pre>{
+  "<span class="kw">cdunicproyect</span>": <span class="str">"PRY001"</span>,
+  "<span class="kw">proyecto</span>":      <span class="str">"Proyecto Ejemplo"</span>,
+  "<span class="kw">nmcantidad</span>":   <span class="num">2</span>,
+  "<span class="kw">valTotal</span>":     <span class="num">50000000</span>,
+  "<span class="kw">iddealbitrix</span>": <span class="num">1234</span>,        <span class="cmt">← ID del Deal en Bitrix24</span>
+  "<span class="kw">cdunicnegocio</span>": <span class="str">""</span>           <span class="cmt">← Se llena al convertir a negocio</span>
+}</pre>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 17: ESTADOS ==================== -->
+    <section id="c7">
+      <div class="section-header">
+        <div class="icon">🔄</div>
+        <h2>17. Estados de la simulación — Configuración</h2>
+      </div>
+
+      <p>Los estados que aparecen en el selector del listado se definen en el archivo de entorno del frontend Angular:</p>
+      <p>Archivo: <code>arpi-front/src/environments/environment.ts</code></p>
+      <pre><span class="kw">export const</span> environment = {
+  <span class="cmt">// ... otras configuraciones ...</span>
+  <span class="ann">ESTADO_SIMULACION</span>: [
+    { code: <span class="str">'A'</span>, description: <span class="str">'Activa'</span>      },
+    { code: <span class="str">'F'</span>, description: <span class="str">'Finalizada'</span>  },
+    { code: <span class="str">'D'</span>, description: <span class="str">'Desistida'</span>   }
+  ]
+};</pre>
+
+      <p>Para agregar un nuevo estado o cambiar los nombres visibles, modifique este array. Recuerde también que los estados a nivel de base de datos son los códigos de una sola letra definidos en el campo <code>cdestado</code> de <code>tarp_simulaciones</code>.</p>
+    </section>
+
+    <!-- ==================== SECCIÓN 18: MAESTRAS ==================== -->
+    <section id="c8">
+      <div class="section-header">
+        <div class="icon">⚙️</div>
+        <h2>18. Maestras del sistema usadas en simulación</h2>
+      </div>
+      <p>El módulo consume varias maestras de configuración (<code>tarp_maestras</code>) para poblar los formularios:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Constante en <code>environment</code></th><th>Código en BD</th><th>Uso en el módulo</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>mastras.MAESTRA_SEGMENTO</code></td>
+              <td><code>PERFILACIONES</code></td>
+              <td>Preguntas y opciones del cuestionario de perfilación del inversor</td>
+            </tr>
+            <tr>
+              <td><code>mastras.MAESTRA_PROPOSITOS</code></td>
+              <td><code>PROPOSITOS</code></td>
+              <td>Lista de propósitos de inversión seleccionables</td>
+            </tr>
+            <tr>
+              <td><code>mastras.MAESTRA_FUENTEAHORROS</code></td>
+              <td><code>FUENTEAHORROS</code></td>
+              <td>Fuentes de ingreso/ahorro y sus categorías</td>
+            </tr>
+            <tr>
+              <td><code>mastras.MAESTRA_DOCUMENTOS_IDENTIDAD</code></td>
+              <td><code>DOCUMENTOS_IDENTIDAD</code></td>
+              <td>Tipos de documento: CC, CE, Pasaporte, NIT, etc.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>Cómo modificar una maestra</h3>
+        <p>Para agregar, eliminar o cambiar opciones de cualquiera de estas listas, acceda a la sección de <strong>Maestras</strong> del sistema ARPI (si está disponible en la interfaz) o directamente en la base de datos:</p>
+        <pre><span class="cmt">-- Ver maestras de perfilación</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> tarp_maestras
+<span class="kw">WHERE</span> cdgrupo = <span class="str">'PERFILACIONES'</span>;
+
+<span class="cmt">-- Ver maestras de propósitos</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> tarp_maestras
+<span class="kw">WHERE</span> cdgrupo = <span class="str">'PROPOSITOS'</span>;
+
+<span class="cmt">-- Ver fuentes de ahorro</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> tarp_maestras
+<span class="kw">WHERE</span> cdgrupo = <span class="str">'FUENTEAHORROS'</span>;</pre>
+        <p>El campo <code>dsdato</code> contiene un JSON con la estructura de la maestra. Modifique ese JSON con cuidado respetando la estructura existente.</p>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 19: FLUJO COMPLETO ==================== -->
+    <section id="c9">
+      <div class="section-header">
+        <div class="icon">🗺️</div>
+        <h2>19. Flujo completo de datos</h2>
+      </div>
+
+      <div class="flow" style="flex-direction: column; gap: 0.2rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <div class="flow-box active">Frontend Angular<br><small>SimulatorComponent</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">HTTP POST<br><small>/api/TarpSimulaciones</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">TarpSimulacionesController<br><small>@PostMapping</small></div>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:center;padding-left:2rem;flex-wrap:wrap;">
+          <div class="flow-arrow">↓</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <div class="flow-box">TarpSimulacionesServiceImpl<br><small>save()</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">Validar contacto<br><small>tarp_contactos</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">TarpSimulacionesDAOImpl<br><small>INSERT</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">tarp_simulaciones<br><small>MySQL</small></div>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:center;padding-left:2rem;flex-wrap:wrap;">
+          <div class="flow-arrow">↓</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <div class="flow-box">TarpSimulacionRulerImpl<br><small>getCantidadTotal, getFuenteIngreso</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">Integración Bitrix<br><small>crear Deal por proyecto</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">UPDATE simulación<br><small>con iddealbitrix</small></div>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:center;padding-left:2rem;flex-wrap:wrap;">
+          <div class="flow-arrow">↓ (al convertir a negocio)</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <div class="flow-box">simulacionNegocio()<br><small>POST /simulacionNegocio</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">tarp_negocios<br><small>INSERT negocio por proyecto</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">tarp_planpagos<br><small>_negociacion</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">UPDATE simulación<br><small>cdestado = 'F'</small></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 20: ERRORES FRECUENTES ==================== -->
+    <section id="c10">
+      <div class="section-header">
+        <div class="icon">🚨</div>
+        <h2>20. Errores frecuentes y soluciones</h2>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Error / Mensaje</th><th>Causa</th><th>Solución</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>"El contacto no se encontró"</td>
+              <td>El <code>cdunicontacto</code> no existe en <code>tarp_contactos</code></td>
+              <td>Verificar que el contacto esté sincronizado desde Bitrix24. Usar la búsqueda de contactos en el formulario.</td>
+            </tr>
+            <tr>
+              <td>"El correo electrónico no se encuentra creado como inversionista"</td>
+              <td>Al convertir a negocio, el email del prospecto no existe en <code>tarp_inversionistas</code></td>
+              <td>Crear primero el inversionista en el módulo de Inversionistas con ese email exacto.</td>
+            </tr>
+            <tr>
+              <td>"El número de documento no se encuentra creado como vendedor"</td>
+              <td>El documento del consultor (<code>dsconsultordocumento</code>) no existe en <code>tarp_vendedores</code></td>
+              <td>Verificar que el asesor esté registrado como vendedor. El documento se obtiene de AWS Cognito (<code>custom:document</code>).</td>
+            </tr>
+            <tr>
+              <td>"El paquete no existe o no se encuentra activo"</td>
+              <td>El <code>nmpaquete</code> no existe en <code>tarp_paquetes</code></td>
+              <td>Verificar que el paquete seleccionado esté activo en el módulo de Paquetes.</td>
+            </tr>
+            <tr>
+              <td>"Error al extraer valores de la simulación"</td>
+              <td>El JSON <code>jsvaloresproyectos</code> o <code>jsformadepago</code> está malformado</td>
+              <td>Revisar el JSON almacenado en BD. Puede deberse a caracteres especiales no escapados.</td>
+            </tr>
+            <tr>
+              <td>PDF no se genera / Error FactoryReportException</td>
+              <td>El archivo <code>reporteSimulacionPDF.jasper</code> no existe o la BD no retorna datos</td>
+              <td>Verificar que el .jasper esté en <code>src/main/resources/</code> y que la simulación tenga datos completos.</td>
+            </tr>
+            <tr>
+              <td>Correo no llega</td>
+              <td>Configuración SMTP incorrecta o error en plantilla</td>
+              <td>Verificar <code>application.properties</code> SMTP. Revisar logs del backend (<code>arpi.log</code>) para el error específico.</td>
+            </tr>
+            <tr>
+              <td>La pestaña de Perfilación no se habilita</td>
+              <td>El contacto no se encontró o no se seleccionó en el buscador</td>
+              <td>Usar el botón "Buscar" e inmediatamente seleccionar el contacto. El sistema activa la pestaña al confirmar la selección.</td>
+            </tr>
+            <tr>
+              <td>"El proyecto YA se creó como negocio"</td>
+              <td>El campo <code>cdunicnegocio</code> en <code>jsvaloresproyectos</code> ya tiene valor</td>
+              <td>Situación normal cuando ya se convirtió ese proyecto. No es un error, es un aviso informativo.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>Consultas de diagnóstico en base de datos</h3>
+        <pre><span class="cmt">-- Ver las últimas simulaciones creadas</span>
+<span class="kw">SELECT</span> nmsimulacion, dsnombres, dsemail, cdestado, dtfechacreacion
+<span class="kw">FROM</span> tarp_simulaciones
+<span class="kw">ORDER BY</span> nmsimulacion <span class="kw">DESC LIMIT</span> <span class="num">10</span>;
+
+<span class="cmt">-- Ver simulaciones en estado Activo</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> tarp_simulaciones
+<span class="kw">WHERE</span> cdestado = <span class="str">'A'</span>
+<span class="kw">ORDER BY</span> nmsimulacion <span class="kw">DESC</span>;
+
+<span class="cmt">-- Ver negocios generados de una simulación específica</span>
+<span class="kw">SELECT</span> n.*, s.nmsimulacion
+<span class="kw">FROM</span> tarp_negocios n
+<span class="kw">JOIN</span> tarp_simulaciones s <span class="kw">ON</span> n.nmsimulacion = s.nmsimulacion
+<span class="kw">WHERE</span> s.nmsimulacion = <span class="num">123</span>;
+
+<span class="cmt">-- Ver plan de pagos de un negocio</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> tarp_planpagos_negociacion
+<span class="kw">WHERE</span> cdunicnegocio = <span class="str">'NEG-001'</span>
+<span class="kw">ORDER BY</span> fecompromiso;
+
+<span class="cmt">-- Ver el JSON de proyectos de una simulación (legible)</span>
+<span class="kw">SELECT</span> nmsimulacion,
+  JSON_PRETTY(jsvaloresproyectos) <span class="kw">as</span> proyectos,
+  JSON_PRETTY(jsformadepago) <span class="kw">as</span> forma_pago
+<span class="kw">FROM</span> tarp_simulaciones
+<span class="kw">WHERE</span> nmsimulacion = <span class="num">123</span>;</pre>
+      </div>
+
+      <div class="subsection">
+        <h3>Ubicación del log del backend</h3>
+        <pre>arpi-back/log/arpi.log          <span class="cmt">← Log actual</span>
+arpi-back/log/arpi.log.YYYY-MM-DD.N.gz  <span class="cmt">← Logs archivados por día</span></pre>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN PROYECTOS ==================== -->
+    <div style="margin: 3rem 0 2rem; text-align: center; position: relative;">
+      <hr style="border: none; border-top: 2px dashed var(--arpi-gold); margin: 0;">
+      <span style="position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--arpi-bg); padding:0 1rem; font-size:0.85rem; color:var(--arpi-gold); font-weight:700; letter-spacing:1px;">🏗️ CONFIGURACIÓN DE PROYECTOS Y PAQUETES PARA SIMULACIÓN 🏗️</span>
+    </div>
+
+    <!-- ==================== P1 ==================== -->
+    <section id="p1">
+      <div class="section-header">
+        <div class="icon">⚙️</div>
+        <h2>21. Dónde configurar un Proyecto para Simulaciones</h2>
+      </div>
+      <p>Para que un proyecto aparezca correctamente en el simulador y muestre proyecciones, renta esperada y cálculos financieros correctos, <strong>deben configurarse dos lugares</strong>:</p>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">⚙️</div>
+          <h4>1. Engranaje del Proyecto</h4>
+          <p>Botón <strong>settings ⚙️</strong> en la tabla de Proyectos. Abre los parámetros internos del proyecto que afectan los cálculos del simulador.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <h4>2. Paquete (módulo Paquetes)</h4>
+          <p>El proyecto debe estar asociado a un <strong>Paquete activo</strong>. En el paquete se definen el valor del ARPI, cantidades, plazo y porcentaje de renta para esa combinación proyecto+paquete.</p>
+        </div>
+      </div>
+      <div class="alert alert-warn">
+        <span class="icon">⚠️</span>
+        <div><strong>Sin ambas configuraciones el simulador no funcionará correctamente.</strong> El proyecto puede existir pero si no está en un paquete activo, el asesor no lo verá al simular. Si está en el paquete pero el engranaje tiene valores en 0, los cálculos de renta y proyección serán incorrectos.</div>
+      </div>
+    </section>
+
+    <!-- ==================== P2 ==================== -->
+    <section id="p2">
+      <div class="section-header">
+        <div class="icon">🔧</div>
+        <h2>22. El Engranaje ⚙️ — Parámetros internos del Proyecto</h2>
+      </div>
+      <p>En el módulo <strong>Proyectos</strong>, en la tabla de proyectos, cada fila tiene un botón con el ícono <strong>⚙️ settings</strong> (tooltip: <em>"Actualizar Parámetros"</em>). Al hacer clic se abre un modal con la tabla de parámetros internos del proyecto (<code>tarp_configuracion_proyecto</code>).</p>
+      <div class="highlight-box">
+        <h4>📍 Ruta en ARPI:</h4>
+        <p>Menú lateral → <strong>Proyectos</strong> → Fila del proyecto → Botón <strong>⚙️ (settings)</strong></p>
+      </div>
+
+      <div class="subsection">
+        <h3>Cómo editar un parámetro del engranaje</h3>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Abrir el modal de configuración</h4><p>Haga clic en el botón <strong>⚙️</strong> de la fila del proyecto que desea configurar.</p></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Localizar el parámetro</h4><p>La tabla muestra dos columnas: <strong>Parámetro</strong> (código) y <strong>Valor</strong> (campo editable directamente en la tabla).</p></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Modificar el valor</h4><p>Haga clic en el campo <strong>Valor</strong> del parámetro que necesita cambiar y escriba el nuevo valor.</p></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Guardar</h4><p>Haga clic en el botón <strong>🔄 update</strong> de la misma fila. El cambio se guarda inmediatamente en la base de datos.</p></div></div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Lista completa de parámetros del engranaje y su impacto en el Simulador</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Parámetro (<code>cdparametro</code>)</th><th>Tipo de Valor</th><th>Qué hace en la Simulación</th><th>Ejemplo</th></tr></thead>
+            <tbody>
+              <tr><td><code>PLANTILLA-SIMULACION</code></td><td>Texto (ID)</td><td>Identifica la plantilla Word (.docx) que se genera al descargar la plantilla de simulación de este proyecto desde el listado</td><td><code>SIMUL-PRY01</code></td></tr>
+              <tr><td><code>PLANTILLA-LIQUIDACION</code></td><td>Texto (ID)</td><td>Plantilla Word para la liquidación mensual del proyecto</td><td><code>LIQ-PRY01</code></td></tr>
+              <tr><td><code>FECHA-INICIO-RENTA</code></td><td>Fecha <code>YYYY-MM-DD</code></td><td>Fecha desde la cual el proyecto genera renta. Se usa en los cálculos de proyección financiera mostrados en el tab <em>Mejor Propuesta</em></td><td><code>2025-01-01</code></td></tr>
+              <tr><td><code>FECHA-INICIO-OPERACION</code></td><td>Fecha <code>YYYY-MM-DD</code></td><td>Fecha de inicio de operaciones. Referencia temporal para cálculos de madurez del activo</td><td><code>2024-06-01</code></td></tr>
+              <tr><td><code>FECHA-PUNTO-EQUILIBRIO</code></td><td>Fecha <code>YYYY-MM-DD</code></td><td>Fecha estimada en que el proyecto alcanza el punto de equilibrio. Se muestra en las proyecciones del simulador</td><td><code>2026-12-01</code></td></tr>
+              <tr><td><code>PORCENTAJE-RENTABILIDAD-EA</code></td><td>Número (%)</td><td>Rentabilidad efectiva anual del proyecto. Se usa en comparativas de paquetes del simulador</td><td><code>8.5</code></td></tr>
+              <tr><td><code>PORCENTAJE-INTERES-POSITIVO</code></td><td>Número (%)</td><td>Escenario optimista para las proyecciones de rentabilidad del simulador</td><td><code>12</code></td></tr>
+              <tr><td><code>PORCENTAJE-INTERES-NEGATIVO</code></td><td>Número (%)</td><td>Escenario conservador para las proyecciones del simulador</td><td><code>6</code></td></tr>
+              <tr><td><code>PORCENTAJE-INTERES-ESPECIAL</code></td><td>Número (%)</td><td>Escenario moderado para las proyecciones del simulador</td><td><code>9</code></td></tr>
+              <tr><td><code>VALOR-MINIMO-INVERSION</code></td><td>Número (COP)</td><td>Valor mínimo de inversión permitido. El simulador valida que el total no esté por debajo</td><td><code>5000000</code></td></tr>
+              <tr><td><code>MENSAJE-PROYECCION</code></td><td>Texto libre</td><td>Mensaje descriptivo que acompaña la gráfica de proyección en el tab <em>Mejor Propuesta</em></td><td><code>Renta a partir del 2025</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Parámetros adicionales para cálculo de renta (críticos para el simulador)</h3>
+        <p>Estos parámetros también se leen desde <code>tarp_configuracion_proyecto</code> y son los más importantes para el simulador. Si no están configurados correctamente la renta aparecerá en <strong>$0</strong> y la gráfica de proyección estará vacía.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Parámetro</th><th>Tipo</th><th>Qué calcula en el Simulador</th><th>Ejemplo</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>VALOR-RENTA-ESPERADA</code></td>
+                <td>Número (COP)</td>
+                <td><strong>⭐ El más importante.</strong> Renta mensual esperada por ARPI. Base del cálculo: <em>RentaTotal = VALOR-RENTA-ESPERADA × NroARPIs × mesesRestantesAño</em>. <strong>Si está en 0, la renta del cliente aparece $0 en la simulación.</strong></td>
+                <td><code>250000</code> (COP por ARPI/mes)</td>
+              </tr>
+              <tr>
+                <td><code>CANT_MESES_PROYECCION</code></td>
+                <td>Número entero (años)</td>
+                <td><strong>⭐ El segundo más importante.</strong> Número de años proyectados hacia el futuro en la gráfica de proyección. <strong>Si está en 0, no se muestra ninguna gráfica.</strong></td>
+                <td><code>10</code> (10 años de proyección)</td>
+              </tr>
+              <tr>
+                <td><code>PUNTOS-SPREAD</code></td>
+                <td>Número entero</td>
+                <td>Puntos adicionales sobre el IPC para la valorización del activo. Afecta la curva de valor comercial proyectado. Fórmula: <em>ValorComercialSig = ValorComercial × (IPC + Spread + 1) / 100</em></td>
+                <td><code>2</code></td>
+              </tr>
+              <tr>
+                <td><code>PORCENTAJE-RENTA-ESPERADA</code></td>
+                <td>Número decimal (%)</td>
+                <td>Porcentaje de renta esperada aplicado sobre el valor del ARPI. Complementa el cálculo de <code>VALOR-RENTA-ESPERADA</code></td>
+                <td><code>5.5</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="alert alert-info">
+          <span class="icon">ℹ️</span>
+          <div>Estos parámetros (<code>VALOR-RENTA-ESPERADA</code>, <code>CANT_MESES_PROYECCION</code>, <code>PUNTOS-SPREAD</code>, <code>PORCENTAJE-RENTA-ESPERADA</code>) se crean y editan también desde el modal del engranaje ⚙️ si ya existen en la tabla, o se insertan directamente en base de datos si aún no existen para ese proyecto.</div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>SQL de consulta y actualización directa</h3>
+        <pre><span class="cmt">-- Ver todos los parámetros de un proyecto</span>
+<span class="kw">SELECT</span> cdparametro, dsvalor_parametro
+<span class="kw">FROM</span>   tarp_configuracion_proyecto
+<span class="kw">WHERE</span>  cdunicproyect = <span class="str">'TU-CODIGO-PROYECTO'</span>
+<span class="kw">ORDER BY</span> cdparametro;
+
+<span class="cmt">-- Actualizar la renta esperada de un proyecto</span>
+<span class="kw">UPDATE</span> tarp_configuracion_proyecto
+<span class="kw">SET</span>    dsvalor_parametro = <span class="str">'250000'</span>
+<span class="kw">WHERE</span>  cdparametro   = <span class="str">'VALOR-RENTA-ESPERADA'</span>
+  <span class="kw">AND</span>  cdunicproyect = <span class="str">'TU-CODIGO-PROYECTO'</span>;
+
+<span class="cmt">-- Insertar el parámetro si no existe</span>
+<span class="kw">INSERT INTO</span> tarp_configuracion_proyecto
+  (cduniconfpro, cdparametro, dsvalor_parametro, cdunicproyect)
+<span class="kw">SELECT</span> UUID(), <span class="str">'VALOR-RENTA-ESPERADA'</span>, <span class="str">'250000'</span>, <span class="str">'TU-CODIGO-PROYECTO'</span>
+<span class="kw">WHERE NOT EXISTS</span> (
+  <span class="kw">SELECT</span> <span class="num">1</span> <span class="kw">FROM</span> tarp_configuracion_proyecto
+  <span class="kw">WHERE</span> cdparametro = <span class="str">'VALOR-RENTA-ESPERADA'</span>
+    <span class="kw">AND</span> cdunicproyect = <span class="str">'TU-CODIGO-PROYECTO'</span>
+);
+
+<span class="cmt">-- Ver diagnóstico completo: todos los proyectos con sus parámetros clave</span>
+<span class="kw">SELECT</span>
+  pr.dsproyecto,
+  <span class="kw">MAX</span>(<span class="kw">CASE WHEN</span> c.cdparametro = <span class="str">'VALOR-RENTA-ESPERADA'</span>    <span class="kw">THEN</span> c.dsvalor_parametro <span class="kw">END</span>) <span class="kw">AS</span> renta_esperada,
+  <span class="kw">MAX</span>(<span class="kw">CASE WHEN</span> c.cdparametro = <span class="str">'CANT_MESES_PROYECCION'</span>     <span class="kw">THEN</span> c.dsvalor_parametro <span class="kw">END</span>) <span class="kw">AS</span> meses_proyeccion,
+  <span class="kw">MAX</span>(<span class="kw">CASE WHEN</span> c.cdparametro = <span class="str">'PUNTOS-SPREAD'</span>             <span class="kw">THEN</span> c.dsvalor_parametro <span class="kw">END</span>) <span class="kw">AS</span> spread,
+  <span class="kw">MAX</span>(<span class="kw">CASE WHEN</span> c.cdparametro = <span class="str">'FECHA-INICIO-RENTA'</span>        <span class="kw">THEN</span> c.dsvalor_parametro <span class="kw">END</span>) <span class="kw">AS</span> inicio_renta,
+  <span class="kw">MAX</span>(<span class="kw">CASE WHEN</span> c.cdparametro = <span class="str">'VALOR-MINIMO-INVERSION'</span>    <span class="kw">THEN</span> c.dsvalor_parametro <span class="kw">END</span>) <span class="kw">AS</span> min_inversion,
+  <span class="kw">MAX</span>(<span class="kw">CASE WHEN</span> c.cdparametro = <span class="str">'PLANTILLA-SIMULACION'</span>      <span class="kw">THEN</span> c.dsvalor_parametro <span class="kw">END</span>) <span class="kw">AS</span> plantilla_sim
+<span class="kw">FROM</span>   tarp_proyectos pr
+<span class="kw">LEFT JOIN</span> tarp_configuracion_proyecto c <span class="kw">ON</span> pr.cdunicproyect = c.cdunicproyect
+<span class="kw">GROUP BY</span> pr.dsproyecto
+<span class="kw">ORDER BY</span> pr.dsproyecto;</pre>
+      </div>
+    </section>
+
+    <!-- ==================== P3 ==================== -->
+    <section id="p3">
+      <div class="section-header">
+        <div class="icon">📦</div>
+        <h2>23. Módulo Paquetes — Conectar Proyectos con el Simulador</h2>
+      </div>
+      <p>El <strong>Paquete</strong> es el puente entre los proyectos y el simulador. Cuando el asesor llega a la pestaña <em>"Mejor Propuesta"</em>, el sistema muestra los paquetes activos que coinciden con el perfil del cliente. <strong>Si el proyecto no está en un paquete activo y vigente, no aparecerá en ninguna simulación.</strong></p>
+      <div class="highlight-box">
+        <h4>📍 Ruta en ARPI:</h4>
+        <p>Menú lateral → <strong>Paquetes</strong> → Botón <strong>+ (Agregar)</strong> o seleccionar uno existente para editar</p>
+      </div>
+
+      <div class="subsection">
+        <h3>Campos del Paquete que afectan directamente la Simulación</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Campo del Paquete</th><th>Efecto en Simulación</th><th>Descripción</th></tr></thead>
+            <tbody>
+              <tr><td><code>cdpaquete</code> / <code>dspaquete</code></td><td>Aparece en la columna "Paquete" del listado de simulaciones y en el tab Mejor Propuesta</td><td>Código y nombre del paquete que ve el asesor</td></tr>
+              <tr><td><code>dscaracteristicas</code></td><td>Se muestra al asesor en el tab Mejor Propuesta</td><td>Texto de características del paquete para presentar al cliente</td></tr>
+              <tr><td><code>dsobjetivo</code></td><td>Ayuda al asesor a elegir el paquete según el propósito del cliente</td><td>Objetivo del paquete</td></tr>
+              <tr><td><code>nmporccomision</code></td><td>No visible al cliente, usado internamente</td><td>Porcentaje de comisión del asesor</td></tr>
+              <tr><td><code>dtfechainicial</code> / <code>dtfechafinal</code></td><td><strong>⭐ Crítico:</strong> el sistema solo muestra paquetes cuya fecha actual esté dentro de este rango. Si está vencido, no aparece en ninguna simulación nueva</td><td>Vigencia del paquete</td></tr>
+              <tr><td><code>cdestado</code></td><td>Solo los paquetes con estado activo aparecen en el simulador</td><td>Estado del paquete (A = activo)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Campos del Proyecto dentro del Paquete (<code>tarp_proyectos_paquete</code>)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Campo</th><th>Impacto en Simulación</th><th>Descripción</th><th>Ejemplo</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>nmvalorarpi</code></td>
+                <td><strong>⭐ Precio unitario del ARPI.</strong> Base para calcular <code>nmtotalinversion</code> en la simulación. Puede ser diferente al valor base del proyecto</td>
+                <td>Valor del Arpi del paquete</td>
+                <td><code>5,500,000</code> COP</td>
+              </tr>
+              <tr>
+                <td><code>nmcantminarpis</code></td>
+                <td>Número mínimo de ARPIs que el cliente debe comprar. El simulador rechaza cantidades menores</td>
+                <td>Cantidad mínima de ARPIs</td>
+                <td><code>2</code></td>
+              </tr>
+              <tr>
+                <td><code>nmplazo</code></td>
+                <td>Define cuántas cuotas se generan en el tab de Forma de Pago</td>
+                <td>Plazo máximo en meses</td>
+                <td><code>36</code></td>
+              </tr>
+              <tr>
+                <td><code>nmvalorrenta</code></td>
+                <td>Se usa en el cálculo de renta por ARPI: <em>RentaArpi/mes = nmvalorarpi × nmvalorrenta / 100</em></td>
+                <td>Porcentaje de renta del ARPI (%)</td>
+                <td><code>0.8</code> (0.8% mensual)</td>
+              </tr>
+              <tr>
+                <td><code>nmcantarpisdisponibles</code></td>
+                <td>Controla la disponibilidad. Si es 0 el proyecto puede no estar disponible para el cliente</td>
+                <td>ARPIs disponibles en este paquete</td>
+                <td><code>50</code></td>
+              </tr>
+              <tr>
+                <td><code>nmporfinanciacion</code></td>
+                <td>Porcentaje del valor total que puede ser financiado. Afecta las opciones de forma de pago</td>
+                <td>Porcentaje financiación (%)</td>
+                <td><code>30</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Paso a paso: agregar un proyecto a un paquete</h3>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Ir al módulo Paquetes</h4><p>Menú lateral → <strong>Paquetes</strong>. Seleccione el paquete a editar o cree uno nuevo.</p></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Clic en "Agregar proyecto"</h4><p>Aparece un nuevo bloque de campos para el proyecto.</p></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Seleccionar el proyecto</h4><p>En el selector desplegable <strong>"Proyectos"</strong>, elija el proyecto. Solo aparecen los proyectos registrados en el módulo Proyectos.</p></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Llenar todos los campos del proyecto en el paquete</h4><p>Complete: <strong>Valor del ARPI</strong>, <strong>Cantidad mínima ARPIs</strong>, <strong>Plazo en meses</strong>, <strong>Porcentaje de renta (%)</strong>, <strong>Cantidad ARPIs disponibles</strong> y <strong>Porcentaje financiación (%)</strong>.</p></div></div>
+          <div class="step"><div class="step-num">5</div><div class="step-body"><h4>Verificar fechas del paquete</h4><p>La <strong>Fecha inicial</strong> y <strong>Fecha final</strong> del paquete deben cubrir el período de ventas. La fecha actual debe estar entre ellas.</p></div></div>
+          <div class="step"><div class="step-num">6</div><div class="step-body"><h4>Guardar</h4><p>Clic en el botón <strong>💾 (save)</strong>. El sistema guarda el paquete y la relación con el proyecto.</p></div></div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>SQL de diagnóstico de Paquetes y Proyectos</h3>
+        <pre><span class="cmt">-- Ver todos los paquetes activos y vigentes con sus proyectos</span>
+<span class="kw">SELECT</span>
+  pk.nmpaquete, pk.cdpaquete, pk.dspaquete,
+  pk.dtfechainicial, pk.dtfechafinal, pk.cdestado,
+  pr.dsproyecto,
+  pp.nmvalorarpi, pp.nmcantminarpis,
+  pp.nmplazo, pp.nmvalorrenta,
+  pp.nmcantarpisdisponibles
+<span class="kw">FROM</span>   tarp_paquetes pk
+<span class="kw">JOIN</span>   tarp_proyectos_paquete pp <span class="kw">ON</span> pk.nmpaquete = pp.nmpaquete
+<span class="kw">JOIN</span>   tarp_proyectos pr <span class="kw">ON</span> pp.cdunicproyect = pr.cdunicproyect
+<span class="kw">WHERE</span>  pk.cdestado = <span class="str">'A'</span>
+  <span class="kw">AND</span>  <span class="kw">CURDATE</span>() <span class="kw">BETWEEN</span> pk.dtfechainicial <span class="kw">AND</span> pk.dtfechafinal
+<span class="kw">ORDER BY</span> pk.nmpaquete;
+
+<span class="cmt">-- Ver paquetes vencidos (no aparecen en el simulador)</span>
+<span class="kw">SELECT</span> nmpaquete, cdpaquete, dspaquete, dtfechainicial, dtfechafinal
+<span class="kw">FROM</span>   tarp_paquetes
+<span class="kw">WHERE</span>  <span class="kw">CURDATE</span>() > dtfechafinal <span class="kw">OR</span> cdestado != <span class="str">'A'</span>
+<span class="kw">ORDER BY</span> dtfechafinal <span class="kw">DESC</span>;
+
+<span class="cmt">-- Actualizar cantidad disponible de ARPIs en un paquete</span>
+<span class="kw">UPDATE</span> tarp_proyectos_paquete
+<span class="kw">SET</span>    nmcantarpisdisponibles = <span class="num">45</span>
+<span class="kw">WHERE</span>  nmpaquete      = <span class="num">1</span>
+  <span class="kw">AND</span>  cdunicproyect = <span class="str">'PRY001'</span>;</pre>
+      </div>
+    </section>
+
+    <!-- ==================== P4 ==================== -->
+    <section id="p4">
+      <div class="section-header">
+        <div class="icon">🔗</div>
+        <h2>24. Flujo completo: Proyecto → Paquete → Simulación</h2>
+      </div>
+
+      <div style="background:var(--arpi-white);border:1px solid var(--arpi-gray-light);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;margin-bottom:1.2rem;justify-content:center;">
+          <div style="background:#fff8e1;border:2px solid var(--arpi-gold);border-radius:8px;padding:0.8rem 1rem;text-align:center;min-width:130px;">
+            <div style="font-size:1.4rem;">🏗️</div>
+            <div style="font-weight:700;font-size:0.82rem;color:var(--arpi-accent);">1. Crear Proyecto</div>
+            <div style="font-size:0.72rem;color:var(--arpi-gray-mid);margin-top:0.2rem;">Módulo Proyectos → <strong>+</strong></div>
+          </div>
+          <div style="color:var(--arpi-gold);font-weight:900;font-size:1.4rem;">→</div>
+          <div style="background:#fff8e1;border:2px solid var(--arpi-gold);border-radius:8px;padding:0.8rem 1rem;text-align:center;min-width:150px;">
+            <div style="font-size:1.4rem;">⚙️</div>
+            <div style="font-weight:700;font-size:0.82rem;color:var(--arpi-accent);">2. Configurar Parámetros</div>
+            <div style="font-size:0.72rem;color:var(--arpi-gray-mid);margin-top:0.2rem;">Botón <strong>settings ⚙️</strong> → editar valores</div>
+          </div>
+          <div style="color:var(--arpi-gold);font-weight:900;font-size:1.4rem;">→</div>
+          <div style="background:#fff8e1;border:2px solid var(--arpi-gold);border-radius:8px;padding:0.8rem 1rem;text-align:center;min-width:150px;">
+            <div style="font-size:1.4rem;">📦</div>
+            <div style="font-weight:700;font-size:0.82rem;color:var(--arpi-accent);">3. Crear/Editar Paquete</div>
+            <div style="font-size:0.72rem;color:var(--arpi-gray-mid);margin-top:0.2rem;">Módulo Paquetes → asociar proyecto</div>
+          </div>
+          <div style="color:var(--arpi-gold);font-weight:900;font-size:1.4rem;">→</div>
+          <div style="background:#e8f5e9;border:2px solid #2e7d32;border-radius:8px;padding:0.8rem 1rem;text-align:center;min-width:130px;">
+            <div style="font-size:1.4rem;">📊</div>
+            <div style="font-weight:700;font-size:0.82rem;color:#1b5e20;">4. Listo para Simular</div>
+            <div style="font-size:0.72rem;color:#2e7d32;margin-top:0.2rem;">Aparece en tab Mejor Propuesta</div>
+          </div>
+        </div>
+
+        <div class="table-wrap" style="margin-bottom:0;">
+          <table>
+            <thead><tr><th>Paso</th><th>Acción</th><th>Dónde</th><th>Impacto en Simulación</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Crear el proyecto</td><td>Proyectos → <strong>+</strong></td><td>Queda disponible para asignarse a paquetes. Sus parámetros se crean en 0.</td></tr>
+              <tr><td>2a</td><td>Configurar <code>VALOR-RENTA-ESPERADA</code></td><td>Proyectos → <strong>⚙️</strong></td><td>Define la renta mensual por ARPI que ve el cliente. <em>Si es 0, el cliente verá $0 de renta.</em></td></tr>
+              <tr><td>2b</td><td>Configurar <code>CANT_MESES_PROYECCION</code></td><td>Proyectos → <strong>⚙️</strong></td><td>Define los años de proyección en la gráfica del simulador. <em>Si es 0, no hay gráfica.</em></td></tr>
+              <tr><td>2c</td><td>Configurar <code>PUNTOS-SPREAD</code></td><td>Proyectos → <strong>⚙️</strong></td><td>Ajuste sobre el IPC para la valorización del activo en el tiempo.</td></tr>
+              <tr><td>2d</td><td>Configurar <code>FECHA-INICIO-RENTA</code></td><td>Proyectos → <strong>⚙️</strong></td><td>Fecha desde la que el proyecto genera renta (afecta la curva de proyección).</td></tr>
+              <tr><td>2e</td><td>Configurar <code>PLANTILLA-SIMULACION</code></td><td>Proyectos → <strong>⚙️</strong></td><td>Define qué documento Word se descarga desde el listado de simulaciones.</td></tr>
+              <tr><td>3a</td><td>Crear el paquete con fechas vigentes</td><td>Paquetes → formulario</td><td>El paquete solo aparece en el simulador si <code>CURDATE() BETWEEN dtfechainicial AND dtfechafinal</code>.</td></tr>
+              <tr><td>3b</td><td>Asociar proyecto con <code>nmvalorarpi</code></td><td>Paquetes → "Agregar proyecto"</td><td>El valor del ARPI del paquete es el precio que el cliente verá en la simulación.</td></tr>
+              <tr><td>3c</td><td>Definir <code>nmvalorrenta</code></td><td>Paquetes → campo "Porcentaje de renta"</td><td>Cálculo: <em>RentaArpi/mes = nmvalorarpi × nmvalorrenta / 100</em>.</td></tr>
+              <tr><td>3d</td><td>Definir <code>nmcantarpisdisponibles</code></td><td>Paquetes → campo "Cantidad ARPIs disponibles"</td><td>Controla cuántos ARPIs puede comprar el cliente en la simulación.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="alert alert-success">
+        <span class="icon">✅</span>
+        <div><strong>Lista de verificación antes de simular un proyecto nuevo:</strong>
+          <ul class="checklist" style="margin-top:0.5rem;">
+            <li>El proyecto está creado en el módulo Proyectos</li>
+            <li><code>VALOR-RENTA-ESPERADA</code> tiene un valor mayor a 0 en el engranaje ⚙️</li>
+            <li><code>CANT_MESES_PROYECCION</code> tiene un valor mayor a 0 (ej: 10 para 10 años)</li>
+            <li><code>PUNTOS-SPREAD</code> está configurado (ej: 2)</li>
+            <li><code>FECHA-INICIO-RENTA</code> tiene la fecha correcta de inicio de renta</li>
+            <li><code>PLANTILLA-SIMULACION</code> apunta a una plantilla existente en el sistema</li>
+            <li>El proyecto está asociado a un paquete con estado activo</li>
+            <li>Las fechas del paquete cubren la fecha actual (<code>dtfechainicial ≤ HOY ≤ dtfechafinal</code>)</li>
+            <li><code>nmvalorarpi</code> tiene el precio correcto del ARPI en el paquete</li>
+            <li><code>nmcantarpisdisponibles</code> es mayor a 0 en el paquete</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== P5 ==================== -->
+    <section id="p5">
+      <div class="section-header">
+        <div class="icon">🖱️</div>
+        <h2>25. Todos los botones del módulo Proyectos y su relación con Simulaciones</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Botón / Ícono</th><th>Acción</th><th>Relación con Simulación</th></tr></thead>
+          <tbody>
+            <tr><td>➕ <code>add</code></td><td>Crear nuevo proyecto</td><td>Al crear, el sistema genera todos los registros en <code>tarp_configuracion_proyecto</code> con valor <code>0</code>. Luego hay que configurarlos con ⚙️</td></tr>
+            <tr><td><strong>⚙️ <code>settings</code></strong></td><td><strong>Configurar parámetros del proyecto</strong></td><td><strong>Directo:</strong> aquí se definen los valores que el simulador usa para calcular renta, proyección, fechas de operación y plantillas</td></tr>
+            <tr><td>🖼️ <code>add_photo_alternate</code></td><td>Subir imagen al proyecto</td><td>La imagen puede mostrarse en el simulador y en las plantillas generadas</td></tr>
+            <tr><td>✏️ <code>edit</code></td><td>Editar datos básicos del proyecto</td><td>Indirecto: cambiar el nombre o descripción puede afectar cómo se muestra en el simulador y en las plantillas</td></tr>
+            <tr><td>🗑️ <code>delete</code></td><td>Eliminar proyecto</td><td><strong>Precaución:</strong> eliminar un proyecto que está en un paquete activo puede causar errores en simulaciones y negocios existentes</td></tr>
+            <tr><td>🏠 <code>home</code></td><td>Agregar espacios (ARPIs)</td><td>Define el inventario físico de ARPIs del proyecto. Afecta la disponibilidad que el simulador puede ofrecer</td></tr>
+            <tr><td>📋 <code>assignment</code></td><td>Generar libro de accionistas</td><td>No afecta directamente la simulación. Es el reporte de propietarios actuales del proyecto</td></tr>
+            <tr><td>📊 <code>bar_chart</code></td><td>Ver proyección financiera</td><td><strong>Ideal para verificar:</strong> muestra la misma proyección que verá el asesor en la simulación. Si aparece vacía o en $0, revise el engranaje ⚙️</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert alert-tip">
+        <span class="icon">💡</span>
+        <div><strong>Tip:</strong> Antes de lanzar un proyecto a ventas, use el botón <strong>📊 bar_chart (Proyección)</strong> para verificar que la gráfica se vea correctamente. Si está vacía o en $0, revise el engranaje ⚙️ y corrija <code>VALOR-RENTA-ESPERADA</code>, <code>CANT_MESES_PROYECCION</code> y <code>PUNTOS-SPREAD</code>.</div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p><strong>ARPI</strong> — Manual de Simulación de Negocio &nbsp;|&nbsp; Versión abril 2026</p>
+    </footer>
+
+  </main>
+</div>
+
+<!-- Activar enlace de sidebar al hacer scroll -->
+<script>
+  (function(){
+    var links = document.querySelectorAll('nav.sidebar ul li a');
+    var sections = [];
+    links.forEach(function(link){
+      var id = link.getAttribute('href').replace('#','');
+      var el = document.getElementById(id);
+      if(el) sections.push({el:el, link:link});
+    });
+    function onScroll(){
+      var scrollY = window.scrollY + 120;
+      var current = null;
+      sections.forEach(function(s){
+        if(s.el.offsetTop <= scrollY) current = s;
+      });
+      links.forEach(function(l){ l.classList.remove('active'); });
+      if(current) current.link.classList.add('active');
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  })();
+</script>
+
+</body>
+</html>
+
+
+
+
